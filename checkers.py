@@ -155,8 +155,9 @@ while not game_over:
     board = board_class.board
     player_turn = player_turn % 2 + 1
     captures = board_class.captures(player_turn)
-    if captures == [] and not board_class.are_adjacent_moves(player_turn):
-        game_over = True
+    if captures == []:
+        if not board_class.are_adjacent_moves(player_turn):
+            game_over = True
     else:
         if len(captures) >= 1:
              print(captures)
