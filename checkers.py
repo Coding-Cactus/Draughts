@@ -1,3 +1,4 @@
+#CODE IS NOT FINISHED
 class Piece:
 
     def __init__(self,player):
@@ -34,7 +35,7 @@ class Board:
     def show(self):
         print(self.board)
 
-    def move(self, init, final,active_player):
+    def move_adjacent(self, init, final,active_player):
         selected_piece = board[init[0]][init[1]]
         if not selected_piece.is_piece:
             return False
@@ -44,13 +45,9 @@ class Board:
             if abs(init[0] - final[0]) == 1 and abs(init[1] - final[1]) == 1:
                 board[init[0]][init[1]] = Piece(0)
                 board[final[0]][final[1]] = Piece(selected_piece.player)
-                if active_player == 1 and final[1] == 7:
-                    board[final[0]][final[1]].promote()
-                elif active_player == 2 and final[1] == 0:
-                    board[final[0]][final[1]].promote()
                 return True
         else:
-            if abs(init[0] - final[0]) == 1 and abs(init[1] - final[1]) == selected_piece.movement:
+            if abs(init[0] - final[0]) == 1 and final[1] - init[1] == selected_piece.movement:
                 board[init[0]][init[1]] = Piece(0)
                 board[final[0]][final[1]] = Piece(selected_piece.player)
                 if active_player == 1 and final[1] == 7:
@@ -161,6 +158,7 @@ while not game_over:
     else:
         if len(captures) >= 1:
              print(captures)
+
         while not is_valid:
             #get move_to_location and selected_piece_location from user via nathaniel
             is_valid = board_class.move(selected_piece_location,move_to_location)
