@@ -119,20 +119,7 @@ class Board:
             for j in range(8):
                 if board[i][j].player == player:
                     if board[i][j].is_king:
-                        if i - 1 > 0:
-                            if j - 1 > 0:
-                                if board[i - 1][j - 1].is_piece and not board[i-2][j-2].is_piece:
-                                    captures.append(((i,j),(i-2,j-2)))
-                            if j + 1 < 7:
-                                if board[i - 1][j + 1].is_piece and not board[i - 2][j + 2].is_piece:
-                                    captures.append(((i, j), (i - 2, j + 2)))
-                        if i + 1 < 7:
-                            if j - 1 > 0:
-                                if board[i + 1][j - 1].is_piece and not board[i + 2][j - 2].is_piece:
-                                    captures.append(((i, j), (i - 2, j - 2)))
-                            if j + 1 < 7:
-                                if board[i - 1][j + 1].is_piece and not board[i - 2][j + 2].is_piece:
-                                    captures.append(((i, j), (i - 2, j + 2)))
+
                     else:
                         if i - 1 > 0:
                             if board[i - 1][j - 1].movement == -1:
@@ -176,7 +163,20 @@ class Game:
                 if piece.player == 1 or piece.is_king:
                     pass
                 if piece.player == 2 or piece.is_king:
-                    pass
+                    if i - 1 > 0:
+                        if j - 1 > 0:
+                            if board[i - 1][j - 1].is_piece and not board[i - 2][j - 2].is_piece:
+                                captures.append(((i, j), (i - 2, j - 2)))
+                        if j + 1 < 7:
+                            if board[i - 1][j + 1].is_piece and not board[i - 2][j + 2].is_piece:
+                                captures.append(((i, j), (i - 2, j + 2)))
+                    if i + 1 < 7:
+                        if j - 1 > 0:
+                            if board[i + 1][j - 1].is_piece and not board[i + 2][j - 2].is_piece:
+                                captures.append(((i, j), (i - 2, j - 2)))
+                        if j + 1 < 7:
+                            if board[i - 1][j + 1].is_piece and not board[i - 2][j + 2].is_piece:
+                                captures.append(((i, j), (i - 2, j + 2)))
 
 class Tree:
     pass
