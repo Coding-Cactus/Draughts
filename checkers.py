@@ -20,25 +20,22 @@ class Board:
     def show(self):
         print(self.board)
 
-    def move(self, piece, row, col):
-        self.board[row][col] = self.board[piece.row][piece.col]
-        if abs(piece.row - row) == 1 and abs(piece.col - col) == 1:
-            piece = self.board[(row+piece.row)/2][(col+piece.col)/2]
-            if piece != 0:
-                if piece.player == 1:
-                    self.play1_pieces -= 1
-                elif piece.player == 2:
-                    self.play2_pieces -= 1
-
+    def move(self, piece_to_move, row, col):
+        self.board[row][col] = self.board[piece_to_move.row][piece_to_move.col]
+        self.board[piece_to_move.row][piece_to_move.col] = self.board[row][col]
+        if abs(piece_to_move.row - row) > 1 and abs(piece_to_move.col - col) > 1:
+            piece = self.board[(row+piece_to_move.row)/2][(col+piece_to_move.col)/2]
+            if piece.player == 1:
+                self.play1_pieces -= 1
+            elif piece.player == 2
+                self.play2_pieces -= 1
             self.board[(row+piece.row)/2][(col+piece.col)/2] = 0
-        self.board[piece.row][piece.col] = self.board[row][col]
-
-    def get_piece(self, row, col):
-        return self.board[row][col]
+            return self.board[row][col]
+        return None
 
     def create_board(self):
         for row in range(8):
-            self.board.append(row)
+            self.board.append([])
             for col in range(8):
                 if col % 2 == (row+1) % 2:
                     if row < 3:
@@ -46,10 +43,10 @@ class Board:
                     elif row > 4:
                         self.board[row].append(Piece(row, col, 2))
                     else:
-                        self.board[row].append(0)
+                        self.board[row].append(None)
                 else:
-                    self.board[row].append(0)
-
+                    self.board[row].append(None)
+"""
     def move_adjacent(self, init, final,active_player):
         selected_piece = board[init[0]][init[1]]
         if not selected_piece.is_piece:
@@ -71,127 +68,98 @@ class Board:
                     board[final[0]][final[1]].promote()
                 return True
         return False
-
-    def are_adjacent_moves(self,player):
-
-        for i in range(8):
-            for j in range(8):
-                if board[i][j].player == player:
-                    if board[i][j].is_king:
-                        if i > 0:
-                            if j > 0:
-                                if not board[i - 1][j - 1].is_piece:
-                                    return True
-                            if j < 7:
-                                if not board[i - 1][j + 1].is_piece:
-                                    return True
-                        if i < 7:
-                            if j > 0:
-                                if not board[i + 1][j - 1].is_piece:
-                                    return True
-                            if j < 7:
-                                if not board[i + 1][j + 1].is_piece:
-                                    return True
-                    else:
-                        if i > 0:
-                            if board[i - 1][j - 1].movement == -1:
-                                if j > 0:
-                                    if not board[i - 1][j - 1].is_piece:
-                                        return True
-                            else:
-                                if j < 7:
-                                    if not board[i - 1][j + 1].is_piece:
-                                        return True
-                        if i < 7:
-                            if board[i - 1][j - 1].movement == -1:
-                                if j > 0:
-                                    if not board[i + 1][j - 1].is_piece:
-                                        return True
-                            else:
-                                if j < 7:
-                                    if not board[i + 1][j + 1].is_piece:
-                                        return True
-        return False
-
-    def captures(self,player):
-        captures = []
-        for i in range(8):
-            for j in range(8):
-                if board[i][j].player == player:
-                    if board[i][j].is_king:
-
-                    else:
-                        if i - 1 > 0:
-                            if board[i - 1][j - 1].movement == -1:
-                                if j - 1 > 0:
-                                    if board[i - 1][j - 1].is_piece and not board[i - 2][j - 2].is_piece:
-                                        captures.append(((i, j), (i - 2, j - 2)))
-                            else:
-                                if j + 1 < 7:
-                                    if board[i - 1][j + 1].is_piece and not board[i - 2][j + 2].is_piece:
-                                        captures.append(((i, j), (i - 2, j + 2)))
-                        if i + 1 < 7:
-                            if board[i - 1][j - 1].movement == -1:
-                                if j -1  > 0:
-                                    if board[i + 1][j - 1].is_piece and not board[i + 2][j - 2].is_piece:
-                                        captures.append(((i, j), (i - 2, j - 2)))
-                            else:
-                                if j + 1 < 7:
-                                    if board[i - 1][j + 1].is_piece and not board[i - 2][j + 2].is_piece:
-                                        captures.append(((i, j), (i - 2, j + 2)))
-        return captures
-
+"""
 class Game:
     def __init__(self):
-        self.board = Board()
-        self.turn = 1
+        self.board_class = Board()
+        self.board = self.board_class.board
+        self.current_player = 1
         self.saved_piece = None
+        self.done = False
+        self.won = None
+
+    def play_game(self):
+        if not self.are_pieces:
+            self.done = True
+        self.saved_piece = None
+        captures = self.all_captures()
+        pass
+
+
+    def end_message(self):
+        print(f"Player {self.won} has won!")
+
+
+    def move_piece(self, piece, row, col):
+        self.saved_piece = self.board_class(piece, row, col)
+
 
     def are_pieces(self):
-        if self.turn == 1 and self.board.play1_pieces == 0:
+        if self.current_player == 1 and self.board.play1_pieces == 0:
             return False
-        if self.turn == 2 and self.board.play2_pieces == 0:
+        if self.current_player == 2 and self.board.play2_pieces == 0:
             return False
         return True
 
     def change_turn(self):
-        self.turn = 3 - self.turn
+        self.current_player = 3 - self.current_player
 
-    def captures(self, piece):
-        if self.board[piece.row][piece.col] != 0:
-            if self.board[piece.row+1][piece.col-1].player == 3 - self.turn:
-                if piece.player == 1 or piece.is_king:
-                    pass
-                if piece.player == 2 or piece.is_king:
-                    if i - 1 > 0:
-                        if j - 1 > 0:
-                            if board[i - 1][j - 1].is_piece and not board[i - 2][j - 2].is_piece:
-                                captures.append(((i, j), (i - 2, j - 2)))
-                        if j + 1 < 7:
-                            if board[i - 1][j + 1].is_piece and not board[i - 2][j + 2].is_piece:
-                                captures.append(((i, j), (i - 2, j + 2)))
-                    if i + 1 < 7:
-                        if j - 1 > 0:
-                            if board[i + 1][j - 1].is_piece and not board[i + 2][j - 2].is_piece:
-                                captures.append(((i, j), (i - 2, j - 2)))
-                        if j + 1 < 7:
-                            if board[i - 1][j + 1].is_piece and not board[i - 2][j + 2].is_piece:
-                                captures.append(((i, j), (i - 2, j + 2)))
+    def all_captures(self):
+        captures = []
+        for r in range(8):
+            for c in range(8):
+                if self.board[r][c] != 0:
+                    if self.board[r][c].player == self.current_player:
+                        captures += self.captures_by_piece(self.board[r][c])
+        return captures
 
-class Tree:
-    pass
+    def captures_for_piece(self, piece):
+        row = piece.row
+        col = piece.col
+        captures = []
+        if piece.player == 1 or piece.is_king:
+            if row + 2 < 8 and col + 2 < 8:
+                captures += [self.captures_in_a_direction(row, col, 1, 1)]
+            if row + 2 < 8 and col - 2 > 0:
+                captures += [self.captures_in_a_direction(row, col, 1, -1)]
+        if piece.player == 2 or piece.is_king:
+            if row - 2 > 0 and col + 2 < 8:
+                captures += [self.captures_in_a_direction(row, col, -1, 1)]
+            if row - 2 > 0 and col - 2 > 0:
+                captures += [self.captures_in_a_direction(row, col, -1, -1)]
+        return captures
 
+    def captures_in_a_direction(self, start_row, start_col, step_row, step_col):
+        if self.board[start_row+step_row][start_col +step_col] == 3 - self.current_player:
+            if self.board[start_row+2*step_row][start_col +2*step_col] is None:
+                return [(start_row, start_col),(start_row+2*step_row, start_col +2*step_col)]
+        return []
 
+    def are_adjacent_moves(self):
+        for r in range(8):
+            for c in range(8):
+                if self.board[r][c] is not None:
+                    piece = self.board[r][c]
+                    if piece.player == 1 or piece.is_king:
+                        if r + 1 < 8 and c + 1 < 8:
+                            if self.board[r+1][c+1] == 0:
+                                return True
+                        if r + 1 < 8 and c - 1 > 0:
+                            if self.board[r + 1][c - 1] == 0:
+                                return True
+                    if piece.player == 2 or piece.is_king:
+                        if r - 1 > 0 and c + 1 < 8:
+                            if self.board[r - 1][c + 1] == 0:
+                                return True
+                        if r - 1 > 0 and c - 1 > 0:
+                            if self.board[r - 1][c - 1] == 0:
+                                return True
+        return False
 
-# need to check for all captures
-# if there are none, check if there are any available moves
-# if there are available moves, let the user select a piece and a destination
-# and see if the piece is in the list of available moves
-
+game = Game()
+game.play_game
 
 """
-board_class = Board()
-
 selected_piece_location = (0,0)
 move_to_location = (0,0)
 
