@@ -46,29 +46,7 @@ class Board:
                         self.board[row].append(None)
                 else:
                     self.board[row].append(None)
-"""
-    def move_adjacent(self, init, final,active_player):
-        selected_piece = board[init[0]][init[1]]
-        if not selected_piece.is_piece:
-            return False
-        if not selected_piece.player == active_player:
-            return False
-        if selected_piece.is_king:
-            if abs(init[0] - final[0]) == 1 and abs(init[1] - final[1]) == 1:
-                board[init[0]][init[1]] = Piece(0)
-                board[final[0]][final[1]] = Piece(selected_piece.player)
-                return True
-        else:
-            if abs(init[0] - final[0]) == 1 and final[1] - init[1] == selected_piece.movement:
-                board[init[0]][init[1]] = Piece(0)
-                board[final[0]][final[1]] = Piece(selected_piece.player)
-                if active_player == 1 and final[1] == 7:
-                    board[final[0]][final[1]].promote()
-                elif active_player == 2 and final[1] == 0:
-                    board[final[0]][final[1]].promote()
-                return True
-        return False
-"""
+
 class Game:
     def __init__(self):
         self.board_class = Board()
@@ -79,15 +57,42 @@ class Game:
         self.won = None
 
     def play_game(self):
-        if not self.are_pieces:
-            self.done = True
-        self.saved_piece = None
-        captures = self.all_captures()
-        pass
 
+        while not self.done
+            if not self.are_pieces:
+                self.done = True
+            else:
+                self.saved_piece = None
+                captures = self.all_captures()
+                if not captures == []:
+                    #make player choose
+                    #self.saved_piece = user input
+                    #move piece
+                    while self.saved_piece is not None:
+                        #if can_promote(saved_piece) saved_piece.promote
+                        captures = self.captures_by_piece(self.saved_piece)
+                        if not captures == []:
+                            # make player choose
+                            # self.saved_piece = user input
+                            # move piece
+                        else:
+                            self.saved_piece = None
+                else:
+                    if self.are_adjacent_moves():
+                        # make player enter some stuff
+                        # self.saved_piece = user input
+                        # move piece
+                    else:
+                        self.done = True
+            self.change_turn()
+        self.end_message()
 
+    def can_promote(self, piece):
+        if piece.row == 7 or piece.row == 0:
+            return True
+        return False
     def end_message(self):
-        print(f"Player {self.won} has won!")
+        print(f"Player {self.current_player} has won!")
 
 
     def move_piece(self, piece, row, col):
@@ -157,28 +162,4 @@ class Game:
         return False
 
 game = Game()
-game.play_game
-
-"""
-selected_piece_location = (0,0)
-move_to_location = (0,0)
-
-game_over = False
-is_valid = False
-player_turn = 0
-captures = []
-while not game_over:
-    board = board_class.board
-    player_turn = player_turn % 2 + 1
-    captures = board_class.captures(player_turn)
-    if captures == []:
-        if not board_class.are_adjacent_moves(player_turn):
-            game_over = True
-    else:
-        if len(captures) >= 1:
-             print(captures)
-
-        while not is_valid:
-            #get move_to_location and selected_piece_location from user via nathaniel
-            is_valid = board_class.move(selected_piece_location,move_to_location)
-"""
+game.play_game()
