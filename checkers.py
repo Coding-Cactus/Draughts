@@ -58,7 +58,7 @@ class Game:
 
     def play_game(self):
 
-        while not self.done
+        while not self.done:
             if not self.are_pieces:
                 self.done = True
             else:
