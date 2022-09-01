@@ -42,12 +42,14 @@ stylesheet = f"""
     
     QPushButton#home {{
         background-image: url(imgs/button.png);
-        margin: 10px 75px;
+        margin: 50px 75px;
+        width: 200px;
     }}
     
     QPushButton#how {{
         background-image: url(imgs/button.png);
-        margin: 50px 225px;        
+        margin: 50px 225px;    
+        width: 200px;    
     }}
     
     QPushButton#tile-active {{

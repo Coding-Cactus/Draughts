@@ -15,24 +15,15 @@ class Draughts(QMainWindow):
     def __init__(self, width, height):
         super().__init__()
 
-        self.width = width
-        self.height = height
+        self.WIDTH  = width
+        self.HEIGHT = height
 
-        self.__set_up()
-
-        self.__set_page(Pages.HOME)
-
-        self.show()
-
-    def __set_up(self):
         self.centralWidget = QWidget()
         self.setCentralWidget(self.centralWidget)
 
+        self.top   = 0
+        self.left  = 0
         self.title = "Draughts"
-        self.left = 0
-        self.top = 0
-        self.WIDTH = self.width
-        self.HEIGHT = self.height
 
         self.tile_grid = TileGrid(self)
 
@@ -42,6 +33,10 @@ class Draughts(QMainWindow):
         self.layout = QGridLayout(self.centralWidget)
         self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignCenter)
+
+        self.__set_page(Pages.HOME)
+
+        self.show()
 
     def __set_page(self, page):
         self.__clear_page()
@@ -70,9 +65,9 @@ class Draughts(QMainWindow):
         how_button.setObjectName("home")
         how_button.clicked.connect(lambda: self.__set_page(Pages.HOW_TO_PLAY))
 
-        self.layout.addWidget(title)
-        self.layout.addWidget(pvp_button)
-        self.layout.addWidget(how_button)
+        self.layout.addWidget(title, 0, 0)
+        self.layout.addWidget(pvp_button, 1, 0)
+        self.layout.addWidget(how_button, 2, 0)
 
         self.setLayout(self.layout)
 
@@ -95,7 +90,7 @@ class Draughts(QMainWindow):
         self.__set_page([Pages.PLAYER1_WIN, Pages.PLAYER2_WIN][winner - 1])
 
     def __show_win_page(self, winner):
-        title = QLabel(f"PLAYER {winner} WINS!")
+        title = QLabel(f"PLAYER {winner}\nWINS!")
         title.setObjectName("title")
         title.setAlignment(Qt.AlignHCenter)
 
@@ -104,15 +99,14 @@ class Draughts(QMainWindow):
         play_button.clicked.connect(lambda: self.__set_page(Pages.PLAYING))
 
         home_button = QPushButton("HOME")
-        home_button.setObjectName("how")
+        home_button.setObjectName("home")
         home_button.clicked.connect(lambda: self.__set_page(Pages.HOME))
 
-        self.layout.addWidget(title)
-        self.layout.addWidget(play_button)
-        self.layout.addWidget(home_button)
+        self.layout.addWidget(title, 0, 0)
+        self.layout.addWidget(play_button, 1, 0)
+        self.layout.addWidget(home_button, 2, 0)
 
         self.setLayout(self.layout)
-
 
     def __show_how_page(self):
         title = QLabel("HOW TO PLAY")
@@ -133,9 +127,9 @@ class Draughts(QMainWindow):
         home_button.setObjectName("how")
         home_button.clicked.connect(lambda: self.__set_page(Pages.HOME))
 
-        self.layout.addWidget(title)
-        self.layout.addWidget(content)
-        self.layout.addWidget(home_button)
+        self.layout.addWidget(title, 0, 0)
+        self.layout.addWidget(content, 1, 0)
+        self.layout.addWidget(home_button, 2, 0)
 
         self.setLayout(self.layout)
 
@@ -144,4 +138,4 @@ class Draughts(QMainWindow):
             w = self.layout.itemAt(i).widget()
             self.layout.removeWidget(w)
             w.setParent(None)
-        # self.__set_up()
+
