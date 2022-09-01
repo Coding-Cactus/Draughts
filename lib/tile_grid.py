@@ -15,6 +15,12 @@ class TileGrid:
 
         tile.clicked.connect(lambda: tile.on_click(self))
 
+    def resize_tiles(self, size):
+        for row in self.tiles:
+            for tile in row:
+                if tile is not None:
+                    tile.resize(size)
+
     def next_turn(self):
         self.current_turn = self.current_turn % 2 + 1
 

@@ -16,13 +16,10 @@ def url(path):
 
 stylesheet = f"""
     QMainWindow {{
-        background-image: {url("imgs/background.jpg")}; 
-        background-repeat: no-repeat;
+        background-image: {url("imgs/background.jpg")};
         background-position: center;
-        min-width: 1280px;
-        max-width: 1280px;
-        min-height: 720px;
-        max-height: 720px;
+        min-width: 800px;
+        min-height: 800px;
     }}
     
     QLabel {{
@@ -67,7 +64,7 @@ stylesheet = f"""
         margin: 0px;
         border-radius: 0px;
         border: 1px solid {var("--main-highlight")};
-        background-color: #0D0D0D;
+        background-color: rgba(13, 13, 13, 0.75);
     }}
     
     QPushButton#tile-inactive {{

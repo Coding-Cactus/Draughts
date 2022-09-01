@@ -10,7 +10,7 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
 
 class Tile(QPushButton):
-    def __init__(self, coord, width, height):
+    def __init__(self, coord, size):
         super(Tile, self).__init__()
 
         self.piece = None
@@ -18,33 +18,46 @@ class Tile(QPushButton):
         self.playable = (coord.y + coord.x) % 2 == 0
 
         suffix = "-active" if self.playable else "-inactive"
-
         self.setObjectName(f"tile{suffix}")
 
-        self.setMinimumSize(QSize(width, height))
-        self.setMaximumSize(QSize(width, height))
+        self.size = size
+        self.background = ""
+        self.__set_css()
 
         if self.playable and coord.y < 3:
             self.place_piece(Piece(self, 1))
         elif self.playable and coord.y > 4:
             self.place_piece(Piece(self, 2))
 
-    def place_piece(self, piece, status=""):
-        self.piece = piece
-        self.__set_background(status)
+    def resize(self, size):
+        self.size = size
+        self.__set_css()
 
-    def remove_piece(self):
-        self.setStyleSheet("")
-        self.piece = None
+    def __set_css(self):
+        self.setStyleSheet(f"""
+            width: {self.size}px;
+            height: {self.size}px;
+            background-image: {self.background};
+        """)
 
     def __set_background(self, suffix=""):
         king = "_king" if self.piece.is_king else ""
         suffix = "_" + suffix if suffix != "" else ""
 
         relative = f"imgs/player{self.piece.player}{king}{suffix}.png"
-        abs = os.path.join(BASE_DIR, relative).replace("\\", "/")
+        absolute = os.path.join(BASE_DIR, relative).replace("\\", "/")
 
-        self.setStyleSheet(f"background-image: url({abs})")
+        self.background = f"url({absolute})"
+        self.__set_css()
+
+    def place_piece(self, piece, status=""):
+        self.piece = piece
+        self.__set_background(status)
+
+    def remove_piece(self):
+        self.background = ""
+        self.__set_css()
+        self.piece = None
 
     def on_click(self, tile_grid):
         if (

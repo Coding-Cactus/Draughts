@@ -3,6 +3,7 @@ from lib.coord import Coord
 from lib.tile_grid import TileGrid
 from lib.tile import Tile
 
+from PyQt5 import QtGui
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtWidgets import QWidget
@@ -28,7 +29,6 @@ class Draughts(QMainWindow):
         self.tile_grid = TileGrid(self)
 
         self.setWindowTitle(self.title)
-        self.setFixedSize(self.WIDTH, self.HEIGHT)
 
         self.layout = QGridLayout(self.centralWidget)
         self.layout.setSpacing(0)
@@ -36,7 +36,7 @@ class Draughts(QMainWindow):
 
         self.__set_page(Pages.HOME)
 
-        self.show()
+        self.showMaximized()
 
     def __set_page(self, page):
         self.__clear_page()
@@ -74,17 +74,26 @@ class Draughts(QMainWindow):
     def __show_play_page(self):
         self.tile_grid.current_turn = 1
 
+        dims = self.centralWidget.size()
+        width, height = dims.width(), dims.height()
+
+        size = (min(width, height) - 200) // 8
+
         for y in range(8):
             for x in range(8):
-                tile = Tile(
-                    Coord(x, y),
-                    self.WIDTH // 8,
-                    self.HEIGHT // 8
-                )
+                tile = Tile(Coord(x, y), size)
                 self.tile_grid.set_tile(tile, Coord(x, y))
                 self.layout.addWidget(tile, y, x)
 
         self.setLayout(self.layout)
+
+    def resizeEvent(self, event):
+        QMainWindow.resizeEvent(self, event)
+
+        dims = self.centralWidget.size()
+        width, height = dims.width(), dims.height()
+
+        self.tile_grid.resize_tiles((min(width, height) - 200) / 8)
 
     def game_over(self, winner):
         self.__set_page([Pages.PLAYER1_WIN, Pages.PLAYER2_WIN][winner - 1])
