@@ -20,15 +20,9 @@ class Tile(QPushButton):
         self.setMinimumSize(QSize(width, height))
         self.setMaximumSize(QSize(width, height))
 
-        # if self.playable and coord.y < 3:
-        #     self.place_piece(Piece(self, 1))
-        # elif self.playable and coord.y > 4:
-        #     self.place_piece(Piece(self, 2))
-
-        if coord in [Coord(1, 1), Coord(2, 2), Coord(3, 3), Coord(2, 4)]:
+        if self.playable and coord.y < 3:
             self.place_piece(Piece(self, 1))
-
-        if coord in [Coord(1, 5), Coord(4, 4), Coord(0, 6), Coord(5, 5)]:
+        elif self.playable and coord.y > 4:
             self.place_piece(Piece(self, 2))
 
     def place_piece(self, piece, status=""):
