@@ -1,8 +1,12 @@
+import os
+
 from lib.coord import Coord
 from lib.piece import Piece
 
 from PyQt5.Qt import QSize
 from PyQt5.QtWidgets import QPushButton
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
 
 
 class Tile(QPushButton):
@@ -37,7 +41,10 @@ class Tile(QPushButton):
         king = "_king" if self.piece.is_king else ""
         suffix = "_" + suffix if suffix != "" else ""
 
-        self.setStyleSheet(f"background-image: url(imgs/player{self.piece.player}{king}{suffix}.png)")
+        relative = f"imgs/player{self.piece.player}{king}{suffix}.png"
+        abs = os.path.join(BASE_DIR, relative).replace("\\", "/")
+
+        self.setStyleSheet(f"background-image: url({abs})")
 
     def on_click(self, tile_grid):
         if (

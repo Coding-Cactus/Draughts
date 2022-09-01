@@ -1,12 +1,22 @@
+import os
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+
+
 def var(name):
     return {
         "--main-highlight": "#70AD47"
     }[name]
 
 
+def url(path):
+    path = os.path.join(BASE_DIR, path).replace("\\", "/")
+    return f"url({path})"
+
+
 stylesheet = f"""
     QMainWindow {{
-        background-image: url(imgs/background.jpg); 
+        background-image: {url("imgs/background.jpg")}; 
         background-repeat: no-repeat;
         background-position: center;
         min-width: 1280px;
@@ -41,13 +51,13 @@ stylesheet = f"""
     }}
     
     QPushButton#home {{
-        background-image: url(imgs/button.png);
+        background-image: {url("imgs/button.png")};
         margin: 50px 75px;
         width: 200px;
     }}
     
     QPushButton#how {{
-        background-image: url(imgs/button.png);
+        background-image: {url("imgs/button.png")};
         margin: 50px 225px;    
         width: 200px;    
     }}
