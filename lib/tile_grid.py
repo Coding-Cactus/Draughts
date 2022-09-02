@@ -27,12 +27,15 @@ class TileGrid:
         game_over = True
         for row in self.tiles:
             for tile in row:
-                if tile.piece is not None and tile.piece.player == self.current_turn:
+                if (
+                        tile.piece is not None and tile.piece.player == self.current_turn
+                        and len(tile.possible_moves(self)) != 0
+                ):
                     game_over = False
                     break
 
-                if not game_over:
-                    break
+            if not game_over:
+                break
 
         if game_over:
             self.draughts_app.game_over(self.current_turn % 2 + 1)

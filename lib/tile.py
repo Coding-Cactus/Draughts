@@ -160,3 +160,27 @@ class Tile(QPushButton):
                 captures.append(Coord(x, y))
 
         return captures
+
+    def possible_moves(self, tile_grid):
+        moves = self.possible_captures(tile_grid)
+
+        left_bound = self.coord.x if self.coord.x < 1 else self.coord.x - 1
+        right_bound = self.coord.x if self.coord.x > len(tile_grid.tiles) - 2 else self.coord.x + 1
+
+        bottom_bound = self.coord.y - 1 \
+            if self.coord.y > 0 and (self.piece.is_king or tile_grid.current_turn == 2) \
+            else self.coord.y
+        top_bound = self.coord.y + 1 \
+            if self.coord.y < len(tile_grid.tiles) - 1 and (self.piece.is_king or tile_grid.current_turn == 1) \
+            else self.coord.y
+
+        for x, y in [
+            (left_bound, top_bound),
+            (right_bound, top_bound),
+            (right_bound, bottom_bound),
+            (left_bound, bottom_bound)
+        ]:
+            if x != self.coord.x and y != self.coord.y and tile_grid.tiles[y][x].piece is None:
+                moves.append(Coord(x, y))
+
+        return moves
