@@ -16,9 +16,9 @@ except ImportError:
 
 BASE_DIR = os.path.dirname(__file__)
 
-a = lambda: abc
+# a = lambda: abc
 if __name__ == "__main__":
-    sys.excepthook = a
+    # sys.excepthook = a
     app = QApplication(sys.argv)
     app.setStyleSheet(stylesheet)
     app.setWindowIcon(QtGui.QIcon(os.path.join(BASE_DIR, "imgs/favicon.ico").replace("\\", "/")))
